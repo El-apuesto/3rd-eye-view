@@ -1,136 +1,93 @@
-const aiAnalysis = require('../services/aiAnalysis');
-const patternMatcher = require('../services/patternMatcher');
-const AnalysisModel = require('../models/AnalysisModel');
-const TheoryModel = require('../models/TheoryModel');
+const aiEngine = require('../services/aiAnalysisEngine');
+const evidenceTracking = require('../services/evidenceTrackingService');
+const misuseDetection = require('../services/misuseDetectionService');
+const watermarkService = require('../services/watermarkService');
+const Theory = require('../models/Theory');
+const Evidence = require('../models/Evidence');
 
-const analysisController = {
-  // Run complete analysis on a theory
-  analyzeTheory: async (req, res) => {
+class AnalysisController {
+  async analyzeTheory(req, res) {
     try {
-      const { theoryId, methods = ['all'], userWeights = null } = req.body;
-      
-      if (!theoryId) {
-        return res.status(400).json({ error: 'Theory ID is required' });
+      const { theoryId, method } = req.body;
+      const userId = req.user.id;
+
+      const accessCheck = misuseDetection.checkAccess(userId, 'analyze_theory');
+      if (!accessCheck.allowed) {
+        return res.status(403).json({ error: accessCheck.reason });
       }
-      
-      const theory = await TheoryModel.getById(theoryId);
-      if (!theory) {
-        return res.status(404).json({ error: 'Theory not found' });
+
+      misuseDetection.logUsage(userId, 'analyze_theory', { theoryId, method });
+
+      const theory = await Theory.findById(theoryId);
+      const evidence = await Evidence.findByTheoryId(theoryId);
+
+      let result;
+      switch (method) {
+        case '1A':
+          result = await aiEngine.analyzeWithConfidenceSystem(theory, evidence);
+          break;
+        case '1B':
+          result = await aiEngine.analyzeEvidenceQuality(evidence);
+          break;
+        case '1C':
+          result = await aiEngine.compareNarratives(theory, theory.officialNarrative, evidence);
+          break;
+        case 'complete':
+          result = await aiEngine.analyzeComplete(theory, evidence, theory.officialNarrative);
+          break;
+        default:
+          return res.status(400).json({ error: 'Invalid method' });
       }
-      
-      console.log(`Starting analysis for theory: ${theory.title}`);
-      
-      // Determine which methods to run
-      const methodsToRun = methods.includes('all') 
-        ? ['confidence', 'evidence', 'comparative'] 
-        : methods;
-      
-      const results = {};
-      
-      // Run each analysis method
-      for (const method of methodsToRun) {
-        console.log(`Running ${method} analysis...`);
-        results[method] = await aiAnalysis.runAnalysis(theory, method, userWeights);
-      }
-      
-      // Get historical patterns
-      results.patterns = await patternMatcher.findPatterns(theory);
-      
-      // Save analysis results
-      const analysis = await AnalysisModel.create({
-        theoryId,
-        methods: methodsToRun,
-        results,
-        userWeights
-      });
-      
+
+      const destroyedEvidence = await evidenceTracking.trackDestroyedEvidence(theoryId, evidence);
+      const watermarked = watermarkService.generateWatermark(result, userId, theoryId);
+
       res.json({
-        analysisId: analysis.id,
-        theoryId,
-        results,
-        timestamp: new Date().toISOString()
+        analysis: watermarked,
+        destroyedEvidence,
+        method
       });
     } catch (error) {
-      console.error('Error analyzing theory:', error);
-      res.status(500).json({ 
-        error: 'Failed to analyze theory',
-        details: process.env.NODE_ENV === 'development' ? error.message : undefined
-      });
-    }
-  },
-
-  // Get existing analysis for a theory
-  getAnalysis: async (req, res) => {
-    try {
-      const { theoryId } = req.params;
-      const { latest = true } = req.query;
-      
-      const analysis = latest 
-        ? await AnalysisModel.getLatest(theoryId)
-        : await AnalysisModel.getAll(theoryId);
-      
-      if (!analysis) {
-        return res.status(404).json({ error: 'No analysis found for this theory' });
-      }
-      
-      res.json(analysis);
-    } catch (error) {
-      console.error('Error fetching analysis:', error);
-      res.status(500).json({ error: 'Failed to fetch analysis' });
-    }
-  },
-
-  // Run specific analysis method
-  runAnalysisMethod: async (req, res) => {
-    try {
-      const { theoryId } = req.params;
-      const { method, userWeights = null } = req.body;
-      
-      if (!['confidence', 'evidence', 'comparative'].includes(method)) {
-        return res.status(400).json({ error: 'Invalid analysis method' });
-      }
-      
-      const theory = await TheoryModel.getById(theoryId);
-      if (!theory) {
-        return res.status(404).json({ error: 'Theory not found' });
-      }
-      
-      const result = await aiAnalysis.runAnalysis(theory, method, userWeights);
-      
-      res.json({
-        theoryId,
-        method,
-        result,
-        timestamp: new Date().toISOString()
-      });
-    } catch (error) {
-      console.error('Error running analysis method:', error);
-      res.status(500).json({ error: 'Failed to run analysis' });
-    }
-  },
-
-  // Get historical patterns for a theory
-  getHistoricalPatterns: async (req, res) => {
-    try {
-      const { theoryId } = req.params;
-      
-      const theory = await TheoryModel.getById(theoryId);
-      if (!theory) {
-        return res.status(404).json({ error: 'Theory not found' });
-      }
-      
-      const patterns = await patternMatcher.findPatterns(theory);
-      
-      res.json({
-        theoryId,
-        patterns,
-        matchCount: patterns.length
-      });
-    } catch (error) {
-      console.error('Error finding patterns:', error);
-      res.status(500).json({ error: 'Failed to find patterns' });
+      console.error('Analysis error:', error);
+      res.status(500).json({ error: 'Analysis failed' });
     }
   }
-};
 
-module.exports = analysisController;
+  async analyzeMotivation(req, res) {
+    try {
+      const { theoryId } = req.params;
+      const theory = await Theory.findById(theoryId);
+      const result = await aiEngine.analyzeMotivation(theory);
+
+      res.json(result);
+    } catch (error) {
+      res.status(500).json({ error: 'Motivation analysis failed' });
+    }
+  }
+
+  async matchPatterns(req, res) {
+    try {
+      const { theoryId } = req.params;
+      const theory = await Theory.findById(theoryId);
+      const result = await aiEngine.matchHistoricalPatterns(theory);
+
+      res.json(result);
+    } catch (error) {
+      res.status(500).json({ error: 'Pattern matching failed' });
+    }
+  }
+
+  async assessInvestigation(req, res) {
+    try {
+      const { theoryId } = req.params;
+      const theory = await Theory.findById(theoryId);
+      const result = await evidenceTracking.assessInvestigationQuality(theory.investigation || {});
+
+      res.json(result);
+    } catch (error) {
+      res.status(500).json({ error: 'Investigation assessment failed' });
+    }
+  }
+}
+
+module.exports = new AnalysisController();
