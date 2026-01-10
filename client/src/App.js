@@ -1,65 +1,51 @@
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import { ThemeProvider, createTheme } from '@mui/material/styles';
-import CssBaseline from '@mui/material/CssBaseline';
-import Navbar from './components/Navbar';
+import { Routes, Route } from 'react-router-dom';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import Header from './components/Header';
+import Footer from './components/Footer';
 import Home from './pages/Home';
+import TheoryList from './pages/TheoryList';
 import TheoryDetail from './pages/TheoryDetail';
-import SearchPage from './pages/SearchPage';
-import AnalysisPage from './pages/AnalysisPage';
-import AboutPage from './pages/AboutPage';
+import Search from './pages/Search';
+import Analysis from './pages/Analysis';
+import Settings from './pages/Settings';
+import Login from './pages/Login';
+import Register from './pages/Register';
+import About from './pages/About';
 import './App.css';
-
-const darkTheme = createTheme({
-  palette: {
-    mode: 'dark',
-    primary: {
-      main: '#64b5f6',
-    },
-    secondary: {
-      main: '#ba68c8',
-    },
-    background: {
-      default: '#0f0c29',
-      paper: '#1a1a2e',
-    },
-    text: {
-      primary: '#ffffff',
-      secondary: '#b0b0b0',
-    },
-  },
-  typography: {
-    fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif',
-    h1: {
-      fontSize: '2.5rem',
-      fontWeight: 600,
-    },
-    h2: {
-      fontSize: '2rem',
-      fontWeight: 500,
-    },
-  },
-});
 
 function App() {
   return (
-    <ThemeProvider theme={darkTheme}>
-      <CssBaseline />
-      <Router>
-        <div className="App">
-          <Navbar />
-          <div className="content-wrapper">
-            <Routes>
-              <Route path="/" element={<Home />} />
-              <Route path="/search" element={<SearchPage />} />
-              <Route path="/theory/:id" element={<TheoryDetail />} />
-              <Route path="/analysis/:id" element={<AnalysisPage />} />
-              <Route path="/about" element={<AboutPage />} />
-            </Routes>
-          </div>
-        </div>
-      </Router>
-    </ThemeProvider>
+    <div className="app">
+      <Header />
+      <main className="main-content">
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/theories" element={<TheoryList />} />
+          <Route path="/theories/:id" element={<TheoryDetail />} />
+          <Route path="/search" element={<Search />} />
+          <Route path="/analysis/:id" element={<Analysis />} />
+          <Route path="/settings" element={<Settings />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
+          <Route path="/about" element={<About />} />
+        </Routes>
+      </main>
+      <Footer />
+      <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="dark"
+      />
+    </div>
   );
 }
 
