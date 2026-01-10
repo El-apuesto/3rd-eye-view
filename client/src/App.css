@@ -1,0 +1,115 @@
+.App {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+}
+
+.content-wrapper {
+  padding-top: 80px;
+  min-height: calc(100vh - 80px);
+}
+
+/* Card Styles */
+.theory-card {
+  background: rgba(26, 26, 46, 0.8);
+  backdrop-filter: blur(10px);
+  border-radius: 12px;
+  padding: 20px;
+  margin: 16px 0;
+  border: 1px solid rgba(100, 181, 246, 0.1);
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.theory-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px rgba(100, 181, 246, 0.2);
+  border-color: rgba(100, 181, 246, 0.3);
+}
+
+/* Badge Styles */
+.confidence-badge {
+  display: inline-block;
+  padding: 4px 12px;
+  border-radius: 16px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  margin: 4px;
+}
+
+.confidence-verified {
+  background: rgba(76, 175, 80, 0.2);
+  color: #81c784;
+  border: 1px solid #4caf50;
+}
+
+.confidence-strongly-supported {
+  background: rgba(3, 169, 244, 0.2);
+  color: #64b5f6;
+  border: 1px solid #03a9f4;
+}
+
+.confidence-plausible {
+  background: rgba(255, 193, 7, 0.2);
+  color: #ffd54f;
+  border: 1px solid #ffc107;
+}
+
+.confidence-unverified {
+  background: rgba(255, 152, 0, 0.2);
+  color: #ffb74d;
+  border: 1px solid #ff9800;
+}
+
+.confidence-contradicted {
+  background: rgba(244, 67, 54, 0.2);
+  color: #e57373;
+  border: 1px solid #f44336;
+}
+
+/* Loading */
+.loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 400px;
+}
+
+/* Error Message */
+.error-message {
+  background: rgba(244, 67, 54, 0.1);
+  border: 1px solid #f44336;
+  border-radius: 8px;
+  padding: 16px;
+  margin: 16px 0;
+  color: #e57373;
+}
+
+/* Stats */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 16px;
+  margin: 24px 0;
+}
+
+.stat-card {
+  background: rgba(26, 26, 46, 0.6);
+  border-radius: 8px;
+  padding: 20px;
+  text-align: center;
+  border: 1px solid rgba(100, 181, 246, 0.1);
+}
+
+.stat-value {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #64b5f6;
+  margin: 8px 0;
+}
+
+.stat-label {
+  font-size: 0.875rem;
+  color: #b0b0b0;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
