@@ -1,114 +1,115 @@
-# Database Setup Instructions
+# Database Setup
 
-## Prerequisites
+## PostgreSQL Database for 3rd Eye View
+
+### Prerequisites
+
 - PostgreSQL 14 or higher installed
-- Database user with create database privileges
+- A PostgreSQL user with database creation privileges
 
-## Setup Steps
+### Setup Instructions
 
-### 1. Create Database
+#### 1. Create Database
+
 ```bash
+# Connect to PostgreSQL
 psql -U postgres
-CREATE DATABASE conspiracy_analyzer;
+
+# Create database
+CREATE DATABASE third_eye_view;
+
+# Create user (if needed)
+CREATE USER your_db_user WITH PASSWORD 'your_password';
+
+# Grant privileges
+GRANT ALL PRIVILEGES ON DATABASE third_eye_view TO your_db_user;
+
+# Exit
 \q
 ```
 
-### 2. Run Schema
+#### 2. Run Schema
+
 ```bash
-psql -U your_username -d conspiracy_analyzer -f schema.sql
+psql -U your_db_user -d third_eye_view -f schema.sql
 ```
 
-### 3. Verify Installation
+### Database Structure
+
+#### Tables
+
+**users**
+- Stores user account information
+- Includes roles for access control (user, moderator, admin)
+
+**theories**
+- Core table storing conspiracy theories
+- Tracks popularity, timeline, and verification status
+- Includes flags for evidence destruction and government relation
+
+**source_track_records**
+- Tracks credibility and accuracy of information sources
+- Maintains historical accuracy counts
+- Categorizes by source type and political lean
+
+**theory_sources**
+- Junction table connecting theories to their sources
+- Stores evidence quality and type
+- Tracks which narrative each source supports
+
+**analysis_history**
+- Stores all AI analysis results
+- Maintains different analysis methods
+- Includes full JSON data for comprehensive records
+
+**evidence_submissions**
+- Community-contributed evidence
+- Moderation workflow (pending/approved/rejected)
+
+**user_preferences**
+- Individual user settings
+- Adjustable source weighting
+- Analysis method preferences
+
+**saved_theories**
+- User bookmarks for theories they're following
+
+### Seed Data
+
+The schema includes seed data for:
+- 8 historically proven conspiracy theories (MK-ULTRA, COINTELPRO, etc.)
+- 10 common source organizations with credibility scores
+
+### Indexes
+
+Optimized indexes for:
+- Theory searches by category, status, and popularity
+- Source lookups
+- Analysis history queries
+- Evidence submission filtering
+
+### Maintenance
+
+#### Backup Database
+
 ```bash
-psql -U your_username -d conspiracy_analyzer
-\dt
+pg_dump -U your_db_user third_eye_view > backup.sql
 ```
 
-You should see the following tables:
-- users
-- theories
-- analyses
-- evidence
-- missing_evidence
+#### Restore Database
 
-## Database Schema Overview
-
-### Tables
-
-#### `theories`
-Stores conspiracy theories submitted by users or discovered through searches.
-
-**Key Fields:**
-- `id`: Unique identifier
-- `title`: Theory title
-- `description`: Detailed description
-- `category`: Category classification
-- `tags`: JSON array of tags
-- `status`: pending, active, or archived
-- `view_count`: Popularity metric
-
-#### `analyses`
-Stores AI analysis results for theories.
-
-**Key Fields:**
-- `theory_id`: References theories table
-- `methods`: JSON array of analysis methods used
-- `results`: Complete analysis results in JSON
-- `user_weights`: User's source weighting preferences
-- `confidence_score`: Overall confidence (0-100)
-
-#### `evidence`
-Stores evidence submitted by users or collected from searches.
-
-**Key Fields:**
-- `theory_id`: References theories table
-- `source_url`: URL to evidence source
-- `description`: Evidence description
-- `evidence_type`: Type classification
-- `quality_score`: Quality rating (0-100)
-- `source_credibility`: Source credibility (0-100)
-- `verification_status`: verified, partially-verified, unverified
-- `upvotes/downvotes`: Community voting
-
-#### `missing_evidence`
-Tracks destroyed, missing, or classified evidence.
-
-**Key Fields:**
-- `theory_id`: References theories table
-- `description`: What evidence is missing
-- `reason`: Why it's missing (destroyed, classified, etc.)
-
-## Maintenance
-
-### Backup Database
 ```bash
-pg_dump -U your_username conspiracy_analyzer > backup_$(date +%Y%m%d).sql
+psql -U your_db_user third_eye_view < backup.sql
 ```
 
-### Restore Database
-```bash
-psql -U your_username -d conspiracy_analyzer < backup_file.sql
+#### View Table Statistics
+
+```sql
+SELECT 
+    schemaname,
+    tablename,
+    pg_size_pretty(pg_total_relation_size(schemaname||'.'||tablename)) AS size
+FROM pg_tables
+WHERE schemaname = 'public'
+ORDER BY pg_total_relation_size(schemaname||'.'||tablename) DESC;
 ```
-
-### Clear All Data (Keep Schema)
-```bash
-psql -U your_username -d conspiracy_analyzer
-TRUNCATE theories, analyses, evidence, missing_evidence, users CASCADE;
-```
-
-## Performance Optimization
-
-The schema includes indexes on:
-- Theory categories and status
-- View counts for popularity sorting
-- Creation dates for time-based queries
-- Foreign keys for join performance
-- Evidence quality scores
-
-## Security Notes
-
-1. Never commit .env file with database credentials
-2. Use strong passwords for database users
-3. Limit database user privileges to only what's needed
-4. Enable SSL for database connections in production
-5. Regular backups are essential
