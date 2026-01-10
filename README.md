@@ -2,210 +2,169 @@
 
 ## AI-Powered Conspiracy Theory Analysis Platform
 
-**3rd Eye View** is an open-source platform that leverages artificial intelligence to analyze conspiracy theories through evidence-based methodologies, historical pattern matching, and transparent analytical frameworks.
+3rd Eye View is an open-source application that searches, tracks, and analyzes conspiracy theories using advanced AI technology. The platform evaluates theories based on evidence quality, source credibility, historical patterns, and logical coherence.
 
-### 🎯 Mission
+## Features
 
-To provide a critical thinking tool that helps users evaluate conspiracy theories based on available evidence, historical patterns, and logical analysis—not to determine absolute truth, but to teach evidence evaluation and critical reasoning.
+### Core Functionality
+- **Web Search Engine**: Searches the internet for conspiracy theories and related evidence
+- **Popularity Tracking**: Ranks theories by search volume, social media mentions, and trending data
+- **Multi-Source Analysis**: Pulls from news outlets, social media, forums, academic papers, and government documents
+- **AI-Powered Analysis**: Uses Claude AI to evaluate theories comprehensively
 
-### ✨ Key Features
+### Analysis Methods (User Selectable)
 
-#### Analysis Methods
-- **Multi-Tier Confidence System**: Categorizes theories as Verified, Strongly Supported, Plausible, Unverified, or Contradicted
-- **Evidence-Based Scoring**: Evaluates quality and quantity of supporting evidence
-- **Comparative Analysis**: Side-by-side comparison of official narratives vs. conspiracy theories
+#### Method 1: Multi-Tier Confidence System
+- 5 categories: Verified, Strongly Supported, Plausible, Unverified, Contradicted
+- Percentage confidence scores (0-100%)
+- Knowability ratings
 
-#### Evidence Tracking
-- **Destroyed/Missing Evidence Tracker**: Flags when critical evidence has been destroyed or is unavailable
-- **Official Investigation Quality Assessment**: Evaluates whether official investigations showed signs of obstruction
-- **Timeline Tracking**: Monitors how long ago events occurred and declassification schedules
-- **Historical Pattern Matching**: Compares theories to previously proven conspiracies (MK-ULTRA, COINTELPRO, etc.)
+#### Method 2: Evidence-Based Scoring
+- Scores based on evidence quality
+- Shows number of credible sources, types of evidence
+- Presents evidence without forcing conclusions
 
-#### Intelligence Features
-- **Motivational Analysis**: Examines why theories might exist (distraction, cover-up, psychological factors)
-- **Counter-Narrative Analysis**: Identifies who benefits from both official and alternative narratives
-- **Source Track Record System**: Weights sources based on historical accuracy
-- **Real-Time Monitoring**: Tracks new evidence and developments
+#### Method 3: Comparative Analysis
+- Side-by-side comparison of official narrative vs. conspiracy theory
+- Highlights supporting and contradicting evidence
+- Identifies what evidence would settle questions
 
-#### Transparency & Education
-- **Open Source**: All code, methodology, and AI prompts are publicly auditable
-- **Educational Focus**: Teaches critical thinking and evidence evaluation
-- **Community Contribution**: Users can submit evidence and challenge analyses
-- **User-Adjustable Bias Controls**: Adjust weighting of different source types
+### Advanced Features
 
-### 🏗️ Architecture
+- **Destroyed Evidence Tracker**: Flags when evidence has been destroyed, sealed, or is missing
+- **Investigation Quality Assessment**: Evaluates whether official investigations showed signs of obstruction
+- **Timeline Tracking**: Monitors how long ago events occurred and declassification status
+- **Historical Pattern Matching**: Compares to previously proven conspiracies (MK-ULTRA, COINTELPRO, etc.)
+- **Motivational Analysis**: Examines WHY theories exist (distraction, cover-up, psychological reasons)
+- **Counter-Narrative Analysis**: Examines who benefits from different narratives
+- **Source Track Record System**: Tracks historical accuracy of sources
+- **User-Adjustable Bias Controls**: Allows users to adjust source weighting preferences
+- **Community Contribution**: Users can submit evidence and challenge conclusions
 
-#### Tech Stack
-- **Frontend**: React with Material-UI
+## Technology Stack
+
+- **Frontend**: React with modern hooks and context API
 - **Backend**: Node.js with Express
 - **Database**: PostgreSQL
-- **AI Engine**: Anthropic Claude API
-- **Search Integration**: Google Custom Search, Bing Search API
+- **AI Integration**: Anthropic Claude API
+- **Search**: Multiple search API integrations
 
-#### Project Structure
-```
-3rd-eye-view/
-├── client/                 # React frontend
-│   ├── src/
-│   │   ├── components/    # React components
-│   │   ├── pages/         # Page components
-│   │   ├── services/      # API services
-│   │   ├── utils/         # Utility functions
-│   │   └── App.js         # Main app component
-│   └── package.json
-├── server/                # Node.js backend
-│   ├── config/           # Configuration files
-│   ├── controllers/      # Route controllers
-│   ├── models/           # Data models
-│   ├── services/         # Business logic
-│   │   ├── aiAnalysis.js      # AI analysis engine
-│   │   ├── searchEngine.js    # Web search integration
-│   │   ├── evidenceTracker.js # Evidence tracking
-│   │   └── patternMatcher.js  # Historical pattern matching
-│   ├── routes/           # API routes
-│   └── index.js          # Server entry point
-├── database/             # Database schemas and migrations
-└── docs/                 # Documentation
-```
+## Installation
 
-### 🚀 Getting Started
-
-#### Prerequisites
+### Prerequisites
 - Node.js (v18 or higher)
 - PostgreSQL (v14 or higher)
-- API Keys:
-  - Anthropic Claude API
-  - Google Custom Search API
-  - Bing Search API (optional)
+- API keys for Anthropic, Google Search, and/or Bing Search
 
-#### Installation
+### Setup
 
-1. **Clone the repository**
+1. Clone the repository:
 ```bash
 git clone https://github.com/El-apuesto/3rd-eye-view.git
 cd 3rd-eye-view
 ```
 
-2. **Install dependencies**
+2. Install dependencies:
 ```bash
 npm run install-all
 ```
 
-3. **Set up environment variables**
+3. Set up environment variables:
 ```bash
 cp .env.example .env
 # Edit .env with your API keys and database credentials
 ```
 
-4. **Set up the database**
+4. Set up the database:
 ```bash
-psql -U your_user -d postgres -f database/schema.sql
+psql -U your_db_user -d postgres -f database/schema.sql
 ```
 
-5. **Start the development server**
+5. Start the development server:
 ```bash
 npm run dev
 ```
 
-The application will be available at:
-- Frontend: http://localhost:3000
-- Backend API: http://localhost:5000
+The application will be available at `http://localhost:3000`
 
-### 📖 Usage
+## Usage
 
-#### Analyzing a Theory
-1. Search for a conspiracy theory or browse trending theories
-2. Select your preferred analysis method (or run all three)
-3. Adjust source weighting based on your preferences
-4. Review the evidence, confidence scores, and historical patterns
-5. Examine the motivational analysis and counter-narratives
+### Analyzing a Theory
 
-#### Contributing Evidence
-1. Navigate to any theory's detail page
+1. Navigate to the search page
+2. Enter a conspiracy theory or topic
+3. Select your preferred analysis method(s)
+4. Adjust source weighting if desired
+5. Review the comprehensive analysis with evidence
+
+### Adjusting Bias Controls
+
+1. Go to Settings
+2. Adjust sliders for different source types:
+   - Government sources
+   - Mainstream media
+   - Alternative media
+   - Academic sources
+   - Whistleblowers
+3. Save preferences
+
+### Contributing Evidence
+
+1. Navigate to any theory page
 2. Click "Submit Evidence"
-3. Provide source URLs, descriptions, and evidence type
-4. Community can vote on evidence quality
+3. Provide source links and description
+4. Community moderators will review submissions
 
-### 🛡️ Ethical Framework
+## Project Structure
 
-#### Core Principles
-1. **Transparency**: All methodology, code, and reasoning is open and auditable
-2. **Humility**: We analyze evidence; we don't determine cosmic truth
-3. **Education**: Teach users to think critically, not what to think
-4. **Empowerment**: Provide tools and information, not verdicts
-5. **Community**: Distributed authority through crowdsourced evidence
+```
+3rd-eye-view/
+├── client/                 # React frontend
+│   ├── public/
+│   ├── src/
+│   │   ├── components/    # React components
+│   │   ├── contexts/      # Context providers
+│   │   ├── hooks/         # Custom hooks
+│   │   ├── pages/         # Page components
+│   │   ├── services/      # API services
+│   │   ├── utils/         # Utility functions
+│   │   └── App.js
+│   └── package.json
+├── server/                # Backend server
+│   ├── config/           # Configuration files
+│   ├── controllers/      # Request handlers
+│   ├── middleware/       # Express middleware
+│   ├── models/           # Data models
+│   ├── routes/           # API routes
+│   ├── services/         # Business logic
+│   └── index.js          # Entry point
+├── database/             # Database schemas and migrations
+├── docs/                 # Documentation
+└── package.json
+```
 
-#### Limitations
-- This tool cannot determine absolute truth
-- Analysis is limited to publicly available evidence
-- AI models have inherent biases that we attempt to mitigate but cannot eliminate
-- Some theories are unfalsifiable and beyond the scope of evidence-based analysis
+## Ethical Considerations
 
-### 🔍 Historical Context
+This tool is designed with transparency and education in mind:
 
-This platform was inspired by documented cases where "conspiracy theories" later proved true:
-- MK-ULTRA (CIA mind control experiments)
-- COINTELPRO (FBI surveillance and disruption programs)
-- Tuskegee Syphilis Experiment
-- Operation Northwoods
-- Gulf of Tonkin Incident
-- NSA Mass Surveillance
-- Iran-Contra Affair
-- And many more...
+- **Open Source**: All code and methodology are publicly auditable
+- **Educational Focus**: Teaches critical thinking, not just providing answers
+- **Honest Limitations**: Clearly states what cannot be known
+- **No Single Truth Score**: Avoids oversimplification
+- **Community-Driven**: Allows user contributions and challenges
 
-Healthy skepticism of official narratives is historically justified, but must be balanced with evidence-based reasoning.
+## Contributing
 
-### 📊 Analysis Methodology
+We welcome contributions! Please see [CONTRIBUTING.md](docs/CONTRIBUTING.md) for guidelines.
 
-#### Confidence Scoring System
-- **Verified (90-100%)**: Multiple credible sources, official documentation, declassified materials
-- **Strongly Supported (70-89%)**: Significant evidence from credible sources, internal consistency
-- **Plausible (40-69%)**: Some evidence, logical coherence, but gaps remain
-- **Unverified (20-39%)**: Insufficient evidence, relies on speculation
-- **Contradicted (0-19%)**: Evidence actively disputes the theory
+## License
 
-#### Evidence Quality Ratings
-- Primary sources (documents, recordings) > Secondary sources (journalism) > Tertiary sources (blogs)
-- Government documents > Corporate records > Personal testimony
-- Verifiable facts > Interpretations > Speculation
+MIT License - see [LICENSE](LICENSE) for details.
 
-#### Red Flags for Obstruction
-- Destroyed or missing evidence
-- Classified documents beyond normal timeframes
-- Investigation leaders expressing doubts about their own conclusions
-- Whistleblower retaliation
-- Pattern matching to previously proven cover-ups
+## Disclaimer
 
-### 🤝 Contributing
+This tool analyzes available evidence; it cannot determine absolute truth. Users are encouraged to do their own research and think critically. This platform is for educational and research purposes.
 
-We welcome contributions! Please see [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
+## Acknowledgments
 
-#### Ways to Contribute
-- **Code**: Improve algorithms, add features, fix bugs
-- **Evidence**: Submit sources and documentation
-- **Analysis**: Challenge or refine existing analyses
-- **Documentation**: Improve guides and explanations
-- **Testing**: Report bugs and edge cases
-
-### 📄 License
-
-MIT License - See [LICENSE](LICENSE) for details.
-
-### ⚠️ Disclaimer
-
-This tool is for educational and research purposes. It provides analysis of available evidence but does not claim to determine absolute truth. Users should:
-- Conduct their own research
-- Examine original sources
-- Think critically about all claims (including ours)
-- Understand that absence of evidence is not evidence of absence
-- Recognize that some truths may be unknowable with current information
-
-### 🙏 Acknowledgments
-
-- Built with Anthropic Claude for AI analysis
-- Inspired by investigative journalists and whistleblowers who've exposed real conspiracies
-- Dedicated to critical thinkers everywhere who question narratives responsibly
-
----
-
-**Remember**: The goal isn't to tell you what's true—it's to teach you how to evaluate evidence and think critically. Question everything, including this tool.
+Based on research into historical proven conspiracies including MK-ULTRA, COINTELPRO, Operation Paperclip, and others that demonstrate the importance of evidence-based skepticism.

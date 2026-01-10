@@ -11,7 +11,7 @@
     "build": "cd client && npm run build",
     "install-all": "npm install && cd client && npm install"
   },
-  "keywords": ["conspiracy", "analysis", "AI", "truth", "evidence"],
+  "keywords": ["conspiracy", "analysis", "AI", "research", "evidence"],
   "author": "El-apuesto",
   "license": "MIT",
   "dependencies": {
@@ -20,11 +20,14 @@
     "dotenv": "^16.3.1",
     "pg": "^8.11.3",
     "axios": "^1.6.2",
-    "@anthropic-ai/sdk": "^0.9.1",
+    "@anthropic-ai/sdk": "^0.10.0",
     "cheerio": "^1.0.0-rc.12",
+    "puppeteer": "^21.6.1",
     "node-cron": "^3.0.3",
     "helmet": "^7.1.0",
-    "express-rate-limit": "^7.1.5"
+    "rate-limiter-flexible": "^4.0.1",
+    "bcrypt": "^5.1.1",
+    "jsonwebtoken": "^9.0.2"
   },
   "devDependencies": {
     "nodemon": "^3.0.2",
