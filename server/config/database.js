@@ -1,9 +1,9 @@
 const { Pool } = require('pg');
 
 const pool = new Pool({
-  host: process.env.DB_HOST,
-  port: process.env.DB_PORT,
-  database: process.env.DB_NAME,
+  host: process.env.DB_HOST || 'localhost',
+  port: process.env.DB_PORT || 5432,
+  database: process.env.DB_NAME || 'third_eye_view',
   user: process.env.DB_USER,
   password: process.env.DB_PASSWORD,
   max: 20,
@@ -13,35 +13,14 @@ const pool = new Pool({
 
 pool.on('error', (err) => {
   console.error('Unexpected database error:', err);
+  process.exit(-1);
 });
 
-const query = async (text, params) => {
-  const start = Date.now();
-  try {
-    const res = await pool.query(text, params);
-    const duration = Date.now() - start;
-    if (process.env.NODE_ENV === 'development') {
-      console.log('Query executed:', { text, duration, rows: res.rowCount });
-    }
-    return res;
-  } catch (error) {
-    console.error('Database query error:', error);
-    throw error;
-  }
-};
-
-const initializeDatabase = async () => {
-  try {
-    await pool.query('SELECT NOW()');
-    console.log('✅ Database connection established');
-  } catch (error) {
-    console.error('❌ Database connection failed:', error);
-    throw error;
-  }
-};
+pool.on('connect', () => {
+  console.log('✅ Database connected successfully');
+});
 
 module.exports = {
-  query,
-  pool,
-  initializeDatabase
+  query: (text, params) => pool.query(text, params),
+  pool
 };

@@ -2,55 +2,79 @@ require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const helmet = require('helmet');
-const rateLimit = require('express-rate-limit');
-const routes = require('./routes');
-const { initializeDatabase } = require('./config/database');
+const { RateLimiterMemory } = require('rate-limiter-flexible');
 
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-// Security middleware
+// Import routes
+const theoriesRoutes = require('./routes/theories');
+const analysisRoutes = require('./routes/analysis');
+const searchRoutes = require('./routes/search');
+const sourcesRoutes = require('./routes/sources');
+const userRoutes = require('./routes/users');
+const evidenceRoutes = require('./routes/evidence');
+
+// Middleware
 app.use(helmet());
 app.use(cors());
 app.use(express.json({ limit: '10mb' }));
-app.use(express.urlencoded({ extended: true, limit: '10mb' }));
+app.use(express.urlencoded({ extended: true }));
 
 // Rate limiting
-const limiter = rateLimit({
-  windowMs: parseInt(process.env.RATE_LIMIT_WINDOW_MS) || 900000, // 15 minutes
-  max: parseInt(process.env.RATE_LIMIT_MAX_REQUESTS) || 100
+const rateLimiter = new RateLimiterMemory({
+  points: parseInt(process.env.RATE_LIMIT_MAX_REQUESTS) || 100,
+  duration: parseInt(process.env.RATE_LIMIT_WINDOW_MS) / 1000 || 900,
 });
-app.use('/api/', limiter);
+
+app.use(async (req, res, next) => {
+  try {
+    await rateLimiter.consume(req.ip);
+    next();
+  } catch (rejRes) {
+    res.status(429).json({
+      error: 'Too many requests',
+      retryAfter: Math.round(rejRes.msBeforeNext / 1000) || 1
+    });
+  }
+});
 
 // Routes
-app.use('/api', routes);
+app.use('/api/theories', theoriesRoutes);
+app.use('/api/analysis', analysisRoutes);
+app.use('/api/search', searchRoutes);
+app.use('/api/sources', sourcesRoutes);
+app.use('/api/users', userRoutes);
+app.use('/api/evidence', evidenceRoutes);
 
 // Health check
-app.get('/health', (req, res) => {
-  res.json({ status: 'ok', timestamp: new Date().toISOString() });
+app.get('/api/health', (req, res) => {
+  res.json({ 
+    status: 'healthy', 
+    timestamp: new Date().toISOString(),
+    environment: process.env.NODE_ENV || 'development'
+  });
 });
 
 // Error handling middleware
 app.use((err, req, res, next) => {
-  console.error(err.stack);
-  res.status(500).json({ 
-    error: 'Internal server error', 
-    message: process.env.NODE_ENV === 'development' ? err.message : 'Something went wrong'
+  console.error('Error:', err);
+  res.status(err.status || 500).json({
+    error: err.message || 'Internal server error',
+    ...(process.env.NODE_ENV === 'development' && { stack: err.stack })
   });
 });
 
-// Initialize database and start server
-initializeDatabase()
-  .then(() => {
-    app.listen(PORT, () => {
-      console.log(`\n👁️  3rd Eye View Server running on port ${PORT}`);
-      console.log(`Environment: ${process.env.NODE_ENV}`);
-      console.log(`API available at: http://localhost:${PORT}/api`);
-    });
-  })
-  .catch(err => {
-    console.error('Failed to initialize database:', err);
-    process.exit(1);
-  });
+// 404 handler
+app.use((req, res) => {
+  res.status(404).json({ error: 'Route not found' });
+});
+
+// Start server
+app.listen(PORT, () => {
+  console.log(`🚀 3rd Eye View API running on port ${PORT}`);
+  console.log(`📊 Environment: ${process.env.NODE_ENV || 'development'}`);
+  console.log(`🔍 Visit http://localhost:${PORT}/api/health to check status`);
+});
 
 module.exports = app;
