@@ -1,4 +1,4 @@
--- users table
+-- Users table
 CREATE TABLE users (
   id SERIAL PRIMARY KEY,
   email VARCHAR(255) UNIQUE NOT NULL,
@@ -13,7 +13,7 @@ CREATE TABLE users (
   metadata JSONB DEFAULT '{}'::jsonb
 );
 
--- analysis_queries table
+-- Analysis queries table
 CREATE TABLE analysis_queries (
   id SERIAL PRIMARY KEY,
   user_id INTEGER REFERENCES users(id),
@@ -24,7 +24,7 @@ CREATE TABLE analysis_queries (
   anonymized_at TIMESTAMP
 );
 
--- analysis_results table
+-- Analysis results table
 CREATE TABLE analysis_results (
   id SERIAL PRIMARY KEY,
   query_id INTEGER REFERENCES analysis_queries(id),
@@ -41,7 +41,7 @@ CREATE TABLE analysis_results (
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
--- sources table
+-- Sources table
 CREATE TABLE sources (
   id SERIAL PRIMARY KEY,
   domain VARCHAR(255) UNIQUE NOT NULL,
@@ -56,7 +56,7 @@ CREATE TABLE sources (
   updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
--- evidence_items table
+-- Evidence items table
 CREATE TABLE evidence_items (
   id SERIAL PRIMARY KEY,
   result_id INTEGER REFERENCES analysis_results(id),
@@ -71,7 +71,7 @@ CREATE TABLE evidence_items (
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
--- historical_events table
+-- Historical events table
 CREATE TABLE historical_events (
   id SERIAL PRIMARY KEY,
   name VARCHAR(255) NOT NULL,
@@ -86,7 +86,7 @@ CREATE TABLE historical_events (
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
--- pattern_matches table
+-- Pattern matches table
 CREATE TABLE pattern_matches (
   id SERIAL PRIMARY KEY,
   result_id INTEGER REFERENCES analysis_results(id),
@@ -98,7 +98,7 @@ CREATE TABLE pattern_matches (
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
--- watermarks table
+-- Watermarks table
 CREATE TABLE watermarks (
   id SERIAL PRIMARY KEY,
   watermark_code VARCHAR(100) UNIQUE NOT NULL,
@@ -106,7 +106,7 @@ CREATE TABLE watermarks (
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
--- usage_logs table
+-- Usage logs table
 CREATE TABLE usage_logs (
   id SERIAL PRIMARY KEY,
   user_id INTEGER REFERENCES users(id),
@@ -120,7 +120,7 @@ CREATE TABLE usage_logs (
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
--- abuse_reports table
+-- Abuse reports table
 CREATE TABLE abuse_reports (
   id SERIAL PRIMARY KEY,
   user_id INTEGER REFERENCES users(id),
@@ -135,7 +135,7 @@ CREATE TABLE abuse_reports (
   reviewed_at TIMESTAMP
 );
 
--- public_audit_logs table
+-- Public audit logs table
 CREATE TABLE public_audit_logs (
   id SERIAL PRIMARY KEY,
   period_start DATE NOT NULL,
