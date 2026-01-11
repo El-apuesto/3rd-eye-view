@@ -9,6 +9,7 @@ export function useAnalysis(token) {
   const runAnalysis = async (query) => {
     setLoading(true);
     setError(null);
+    
     try {
       const data = await api.runAnalysis(query, token);
       if (data.error) {
@@ -23,5 +24,5 @@ export function useAnalysis(token) {
     }
   };
 
-  return { runAnalysis, loading, error, result };
+  return { loading, error, result, runAnalysis, setResult };
 }
