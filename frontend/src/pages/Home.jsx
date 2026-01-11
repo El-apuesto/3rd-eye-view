@@ -3,62 +3,57 @@ import { Link } from 'react-router-dom';
 
 export default function Home() {
   return (
-    <div className="max-w-4xl mx-auto text-center">
-      <h1 className="text-5xl font-bold text-gray-900 mb-6">
-        3rd Eye View
-      </h1>
-      <p className="text-xl text-gray-600 mb-8">
-        Evidence-based conspiracy theory analysis using AI, historical pattern matching, and transparent methodologies
-      </p>
-      
-      <div className="bg-white rounded-lg shadow-lg p-8 mb-8">
-        <h2 className="text-2xl font-semibold mb-4">How It Works</h2>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <div>
-            <div className="text-4xl mb-2">🔍</div>
-            <h3 className="font-semibold mb-2">Evidence Quality</h3>
-            <p className="text-gray-600 text-sm">
-              Analyzes sources, verifiability, recency, and provenance of evidence
+    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-purple-900 to-gray-900">
+      <div className="max-w-6xl mx-auto px-4 py-20">
+        <div className="text-center">
+          <h1 className="text-6xl font-bold text-white mb-6">
+            3rd Eye View
+          </h1>
+          <p className="text-xl text-gray-300 mb-8">
+            Evidence-Based Conspiracy Theory Analysis Platform
+          </p>
+          <p className="text-lg text-gray-400 max-w-3xl mx-auto mb-12">
+            Analyze claims using evidence quality assessment, source credibility tracking, 
+            and historical pattern matching. This tool evaluates how well-supported theories are, 
+            not whether they are absolutely true or false.
+          </p>
+          
+          <div className="flex justify-center gap-4">
+            <Link
+              to="/analysis"
+              className="bg-purple-600 hover:bg-purple-700 text-white font-bold py-3 px-8 rounded-lg transition"
+            >
+              Start Analysis
+            </Link>
+            <Link
+              to="/login"
+              className="bg-gray-700 hover:bg-gray-600 text-white font-bold py-3 px-8 rounded-lg transition"
+            >
+              Login
+            </Link>
+          </div>
+        </div>
+
+        <div className="grid md:grid-cols-3 gap-8 mt-20">
+          <div className="bg-gray-800 bg-opacity-50 p-6 rounded-lg">
+            <h3 className="text-xl font-bold text-white mb-3">Evidence Quality</h3>
+            <p className="text-gray-400">
+              Evaluates source types, verifiability, recency, and chain of custody indicators
             </p>
           </div>
-          <div>
-            <div className="text-4xl mb-2">📊</div>
-            <h3 className="font-semibold mb-2">Source Credibility</h3>
-            <p className="text-gray-600 text-sm">
-              Tracks source reliability, bias, and historical accuracy
+          <div className="bg-gray-800 bg-opacity-50 p-6 rounded-lg">
+            <h3 className="text-xl font-bold text-white mb-3">Source Credibility</h3>
+            <p className="text-gray-400">
+              Tracks publication history, bias ratings, and correction records
             </p>
           </div>
-          <div>
-            <div className="text-4xl mb-2">🔄</div>
-            <h3 className="font-semibold mb-2">Pattern Matching</h3>
-            <p className="text-gray-600 text-sm">
-              Compares claims against verified historical events
+          <div className="bg-gray-800 bg-opacity-50 p-6 rounded-lg">
+            <h3 className="text-xl font-bold text-white mb-3">Pattern Matching</h3>
+            <p className="text-gray-400">
+              Compares against verified historical events like MK-ULTRA, COINTELPRO, and more
             </p>
           </div>
         </div>
-      </div>
-
-      <div className="space-x-4">
-        <Link 
-          to="/analysis" 
-          className="inline-block bg-blue-600 text-white px-8 py-3 rounded-lg font-semibold hover:bg-blue-700 transition"
-        >
-          Start Analysis
-        </Link>
-        <Link 
-          to="/login" 
-          className="inline-block bg-gray-200 text-gray-800 px-8 py-3 rounded-lg font-semibold hover:bg-gray-300 transition"
-        >
-          Login
-        </Link>
-      </div>
-
-      <div className="mt-12 text-left bg-yellow-50 border-l-4 border-yellow-400 p-6 rounded">
-        <h3 className="font-semibold text-yellow-900 mb-2">Important Notice</h3>
-        <p className="text-yellow-800 text-sm">
-          This tool evaluates <strong>evidence quality and patterns</strong>, not absolute truth. 
-          Results should be used as a starting point for further investigation, not as definitive proof.
-        </p>
       </div>
     </div>
   );
