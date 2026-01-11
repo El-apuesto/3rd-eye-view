@@ -160,3 +160,12 @@ CREATE INDEX idx_pattern_event_id ON pattern_matches(event_id);
 CREATE INDEX idx_usage_logs_user_id ON usage_logs(user_id);
 CREATE INDEX idx_usage_logs_created_at ON usage_logs(created_at);
 CREATE INDEX idx_abuse_user_id ON abuse_reports(user_id);
+
+-- Seed historical events
+INSERT INTO historical_events (name, code, description, start_year, end_year, revealed_year, government_admission, evidence_destruction, pattern_characteristics) VALUES
+('MK-ULTRA', 'MKULTRA', 'CIA mind control program involving drug experiments, hypnosis, and psychological manipulation', 1953, 1973, 1975, true, true, '{"surveillance": false, "infiltration": false, "drug_experiments": true, "media_infiltration": false, "psychological_manipulation": true, "secret_experimentation": true}'),
+('COINTELPRO', 'COINTELPRO', 'FBI program to surveil, infiltrate, discredit, and disrupt domestic political organizations', 1956, 1971, 1971, true, true, '{"surveillance": true, "infiltration": true, "drug_experiments": false, "media_infiltration": true, "political_suppression": true, "false_flag_operations": true}'),
+('Operation Northwoods', 'NORTHWOODS', 'Proposed false flag operation to justify military intervention in Cuba', 1962, 1962, 1997, true, false, '{"surveillance": false, "infiltration": false, "drug_experiments": false, "media_infiltration": false, "false_flag_operations": true, "military_deception": true}'),
+('Tuskegee Syphilis Study', 'TUSKEGEE', 'Unethical study observing untreated syphilis in African American men', 1932, 1972, 1972, true, false, '{"surveillance": false, "infiltration": false, "drug_experiments": false, "media_infiltration": false, "medical_exploitation": true, "racial_targeting": true, "unethical_experimentation": true}'),
+('Iran-Contra Affair', 'IRANCONTRA', 'Secret arms sales to Iran to fund Nicaraguan Contras', 1985, 1987, 1986, true, true, '{"surveillance": false, "infiltration": false, "drug_experiments": false, "media_infiltration": false, "weapons_trafficking": true, "illegal_funding": true, "congressional_deception": true}'),
+('Operation Mockingbird', 'MOCKINGBIRD', 'CIA operation to influence media and journalists', 1950, 1970, 1975, true, false, '{"surveillance": false, "infiltration": true, "drug_experiments": false, "media_infiltration": true, "propaganda": true, "journalist_recruitment": true}');
